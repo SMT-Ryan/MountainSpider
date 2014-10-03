@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.riker.www;
+package com.riker.spider;
 
 /**
  * @author ryan

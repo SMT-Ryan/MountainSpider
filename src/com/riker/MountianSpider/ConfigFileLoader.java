@@ -42,7 +42,6 @@ public class ConfigFileLoader {
 			int separator = 0;
 			BufferedReader br = new BufferedReader(new FileReader(
 					"scripts/MountainSpider.Property"));
-			StringBuilder sb = new StringBuilder();
 			String line = br.readLine();
 
 			while (line != null) {
@@ -54,10 +53,12 @@ public class ConfigFileLoader {
 				}
 				line = br.readLine();
 			}
+			br.close();
 		}catch (IOException e){
 			//TODO error message
 			System.out.println("file not found");
 		}
+		
 	}
 
 	/**

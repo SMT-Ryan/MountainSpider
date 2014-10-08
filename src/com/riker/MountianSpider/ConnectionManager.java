@@ -4,6 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
+import java.util.Map;
 
 /****************************************************************************
  * <b>Title</b>: ConnectionManager.java <p/>
@@ -20,11 +23,12 @@ import java.net.URL;
  ****************************************************************************/
 public class ConnectionManager {
 
+	private URL targetUrl = null;
+	private Map<String, List<String>> map = null;
 	/**
 	 * Constructs an instance of ConnectionManager.
 	 */
 	public ConnectionManager() {
-
 	}
 
 	/** 
@@ -40,41 +44,102 @@ public class ConnectionManager {
 	 */
 	public InputStream connectTargetWebsite(String targetDomainName, String targetUri, 
 			String targetProtocol){
-		
+
 		//opens the target URL
 		try{
 			URL targetUrl = new URL(targetProtocol + targetDomainName 
 					+ targetUri);
+			
+			//sets the header map
+			setHeader(targetUrl, map);
+			
 			InputStream in = targetUrl.openStream();
 			return in;
 		}catch (IOException ex) {
+			//TODO error message
 			ex.printStackTrace();
 		}
-	
 		return null;
 	}
 
 	/**
-	 * @param in 
-	 * @return 
+	 * This method returns the locations data in the form of a byte array.
+	 * 
+	 * @param in an active input stream from the target.
+	 * @return a byte array containing bit encoded data from the web source.
 	 * 
 	 */
 	public byte[] getData(InputStream in) {
-		
+
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		int t;
-		
+
 		try{
 			while (( t=in.read()) != -1) {
 				baos.write(t);
 			}
 		}catch (IOException ex){
+			//TODO error message
 			ex.printStackTrace();
 		}
-		
 		return baos.toByteArray();
+	}
 
+	/**
+	 * 
+	 * @param targetUrl 
+	 * @param map 
+	 * @param in
+	 * @return 
+	 * @throws IOException 
+	 */
+	public Map<String, List<String>> setHeader(URL targetUrl, 
+			Map<String, List<String>> map ) throws IOException{
+		
+		URLConnection uc = targetUrl.openConnection();
+		
+		this.map = uc.getHeaderFields();
+		map = this.map;
+		
+		return map;
 	}
 
 
+	public void printHeader(Map<String, List<String>> map) {
+		System.out.println("Printing Response Header...\n");
+		 
+		for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+			System.out.println("Key : " + entry.getKey() 
+                    + " ,Value : " + entry.getValue());
+		}
+	}
+
+	/**
+	 * @return the targetUrl
+	 */
+	public URL getTargetUrl() {
+		return targetUrl;
+	}
+
+	/**
+	 * @param targetUrl the targetUrl to set
+	 */
+	public void setTargetUrl(URL targetUrl) {
+		this.targetUrl = targetUrl;
+	}
+
+	/**
+	 * @return the map
+	 */
+	public Map<String, List<String>> getMap() {
+		return map;
+	}
+
+	/**
+	 * @param map the map to set
+	 */
+	public void setMap(Map<String, List<String>> map) {
+		this.map = map;
+	}
+			
 }

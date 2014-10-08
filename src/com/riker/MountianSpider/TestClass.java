@@ -17,8 +17,10 @@ public class TestClass {
 		
 		//sets the test data to example.com
 		targetProtocol = "http://";
-		targetDomainName = "www.stantec.com";
-		targetUri = "/our-work.html";
+		//targetDomainName = "www.stantec.com";
+		targetDomainName = "www.example.com";
+		//targetUri = "/our-work.html";
+		targetUri = "";
 
 		System.out.println("started program \n");
 		ConnectionManager cm = new ConnectionManager();
@@ -27,6 +29,8 @@ public class TestClass {
 		
 		String dataString = new String(data);
 		System.out.print(dataString);
+		
+		cm.printHeader(cm.getMap());
 		
 	}
 

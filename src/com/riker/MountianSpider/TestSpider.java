@@ -15,13 +15,15 @@ public class TestSpider {
 		String targetUri = null;
 		String targetProtocol = null;
 		String targetCode = null;
+		String targetCodeEnd = null;
 				
 		
 		//TODO sets the test data to example.com replace with config file method
 		targetProtocol = "http://";
-		targetDomainName = "www.whatsmyuseragent.com";
+		targetDomainName = "www.whatsmyuseragent.com/";
 		targetUri = "";
-		targetCode = "\"lvl1\" href=";
+		targetCode = "l1\" href=\"";
+		targetCodeEnd = "\"";
 
 		//TODO might also want a message class again
 		System.out.println("started program \n");
@@ -31,12 +33,12 @@ public class TestSpider {
 					targetProtocol));
 		
 		//parses the byte array for the target code
-		DataParser(data, targetCode);
+		DataParser dp = new DataParser(data, targetCode, targetCodeEnd);
+		dp.ParseForTarget();
+		dp.clear();
+		
 		//send byte array to parse for reduction
-		
-		String dataString = new String(data);
-		System.out.print(dataString);
-		
+	
 		cm.printHeader(cm.getMap());
 		
 	}

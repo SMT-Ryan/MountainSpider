@@ -3,6 +3,7 @@ package com.riker.MountianSpider;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.Map;
 public class ConnectionManager {
 
 	private URL targetUrl = null;
-	private Map<String, List<String>> map = null;
+	private Map<String, List<String>> headerMap = null;
 	/**
 	 * Constructs an instance of ConnectionManager.
 	 */
@@ -51,10 +52,12 @@ public class ConnectionManager {
 					+ targetUri);
 			
 			//sets the header map
-			setHeader(targetUrl, map);
+			headerMap = setHeader(targetUrl, headerMap);
 			
 			InputStream in = targetUrl.openStream();
+			
 			return in;
+			
 		}catch (IOException ex) {
 			//TODO error message
 			ex.printStackTrace();
@@ -86,36 +89,42 @@ public class ConnectionManager {
 	}
 
 	/**
+	 * This method calls an instance of URLConnection to the target web location
+	 * the method than loads a map with the header into a map.  
 	 * 
-	 * @param targetUrl 
-	 * @param map 
-	 * @param in
-	 * @return 
+	 * @param targetUrl the url object for the target web location
+	 * 
+	 * @param map current header map
+	 * @return a full map of header data
 	 * @throws IOException 
 	 */
 	public Map<String, List<String>> setHeader(URL targetUrl, 
-			Map<String, List<String>> map ) throws IOException{
+			Map<String, List<String>> headerMap ) throws IOException{
 		
-		URLConnection uc = targetUrl.openConnection();
+		URLConnection uc = (HttpURLConnection)targetUrl.openConnection();
+		uc.addRequestProperty("User-Agent","Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:32.0) Gecko/20100101 Firefox/32.0");
+		uc.connect();
+		headerMap = uc.getHeaderFields();
 		
-		this.map = uc.getHeaderFields();
-		map = this.map;
-		
-		return map;
+		return headerMap;
 	}
 
-
-	public void printHeader(Map<String, List<String>> map) {
-		System.out.println("Printing Response Header...\n");
+/**
+ * This method displays the header data stored in the headerMap
+ * 
+ * @param headerMap current header map
+ */
+	public void printHeader(Map<String, List<String>> headerMap) {
+		System.out.println("Printing Header*********************\n");
 		 
-		for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+		for (Map.Entry<String, List<String>> entry : headerMap.entrySet()) {
 			System.out.println("Key : " + entry.getKey() 
                     + " ,Value : " + entry.getValue());
 		}
 	}
 
 	/**
-	 * @return the targetUrl
+	 * @return the targetUrl 
 	 */
 	public URL getTargetUrl() {
 		return targetUrl;
@@ -132,14 +141,14 @@ public class ConnectionManager {
 	 * @return the map
 	 */
 	public Map<String, List<String>> getMap() {
-		return map;
+		return headerMap;
 	}
 
 	/**
 	 * @param map the map to set
 	 */
 	public void setMap(Map<String, List<String>> map) {
-		this.map = map;
+		this.headerMap = map;
 	}
 			
 }

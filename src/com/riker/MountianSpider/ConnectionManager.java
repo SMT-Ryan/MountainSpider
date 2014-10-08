@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +113,7 @@ public class ConnectionManager {
 			uc.connect();
 			return headerMap;
 		}catch ( UnknownHostException ex){
-			//error
+			//TODO error message
 			return headerMap;
 		}
 	}
@@ -125,6 +124,8 @@ public class ConnectionManager {
 	 * @param headerMap current header map
 	 */
 	public void printHeader(Map<String, List<String>> headerMap) {
+
+		//TODO remove when done testing
 		System.out.println("Printing Header*********************\n");
 
 		for (Map.Entry<String, List<String>> entry : headerMap.entrySet()) {
@@ -134,6 +135,8 @@ public class ConnectionManager {
 	}
 
 	/**
+	 * This method returns the target Url object
+	 * 
 	 * @return the targetUrl 
 	 */
 	public URL getTargetUrl() {
@@ -141,6 +144,8 @@ public class ConnectionManager {
 	}
 
 	/**
+	 * This method sets the target Url object
+	 * 
 	 * @param targetUrl the targetUrl to set
 	 */
 	public void setTargetUrl(URL targetUrl) {
@@ -148,6 +153,8 @@ public class ConnectionManager {
 	}
 
 	/**
+	 * This method returns the existing map
+	 * 
 	 * @return the map
 	 */
 	public Map<String, List<String>> getMap() {
@@ -155,6 +162,8 @@ public class ConnectionManager {
 	}
 
 	/**
+	 * This method changes the contents of the existing map
+	 * 
 	 * @param map the map to set
 	 */
 	public void setMap(Map<String, List<String>> map) {

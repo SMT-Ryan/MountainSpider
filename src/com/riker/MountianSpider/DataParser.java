@@ -3,11 +3,14 @@
  */
 package com.riker.MountianSpider;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /****************************************************************************
  * <b>Title</b>: DataParser.java <p/>
  * <b>Project</b>: WebCrescendo <p/>
  * <b>Description: </b> This method will search the incoming byte array for 
- * spider designed string or char patterns
+ * parent class designated string or char patterns
  * <p/>
  * <b>Copyright:</b> Copyright (c) 2014<p/>
  * <b>Company:</b> Silicon Mountain Technologies<p/>
@@ -21,6 +24,7 @@ public class DataParser {
 	private byte[] data = null;
 	private String target = null;
 	private String targetEnd = null;
+	List<String> secondaryTargetFilePath = new ArrayList<String>();
 
 
 	/**
@@ -37,7 +41,7 @@ public class DataParser {
 	 * @param target is set to the target string at construction.
 	 * @param targetEnd
 	 */
-	public DataParser(byte[] data , String target, String targetEnd ) {
+	public DataParser(byte[] data , String target, String targetEnd) {
 		this.setData(data);
 		this.setTarget(target);
 		this.setTargetEnd(targetEnd);
@@ -45,7 +49,8 @@ public class DataParser {
 	}
 
 	/**
-	 * 
+	 * This method checks the byte array from the parent class for the required 
+	 * starting and ending string.  The substrings are added to a list.   
 	 */
 	public void ParseForTarget(){
 
@@ -53,31 +58,21 @@ public class DataParser {
 		int i = 0;
 		int t = 0;
 
-		//TODO remove testing code
-		System.out.println("***VV****mem dump*********");
-		System.out.println(dataString);
-		System.out.println("****^^***mem dump*********");
-		
 		while (true) {
-			
+
 			t = dataString.indexOf(this.target, i);
 			int start = t + this.target.length();
-			
 			if (t == -1) {
-				System.out.println("break");
 				break;
 			}
-			int end = dataString.indexOf("\"", start);
-			//TODO remove testing code
-			System.out.println(dataString.substring(start, end) );
-			
-			i = end + 1;  // advance i to start the next iteration
-			System.out.println(i);			
+			int end = dataString.indexOf(this.targetEnd, start);
+			secondaryTargetFilePath.add(dataString.substring(start, end));
+			i = end + 1;  
 		}
 	}
 
 	/**
-	 * 
+	 * This method sets both the data and the target to null
 	 */
 	public void clear(){
 		this.setData(null);

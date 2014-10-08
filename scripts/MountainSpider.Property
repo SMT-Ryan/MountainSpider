@@ -1,8 +1,8 @@
 #Properties for climbing the Silicon Mountain
-name=”Silicon Mountain Technologies”
-targetProtocol=http://
-targetPort=80
-targetHost=www.siliconmtn.com
-targetFilePath=
-targetCode=l1\" href=\"
-targetCodeEnd=\"
+name='Silicon Mountain Technologies
+targetProtocol='http://
+targetPort='80
+targetHost='www.siliconmtn.com
+targetFilePath='
+targetCode='l1\" href=\"
+targetCodeEnd='\"

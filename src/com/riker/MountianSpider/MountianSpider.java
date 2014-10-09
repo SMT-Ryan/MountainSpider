@@ -5,6 +5,17 @@ import java.util.List;
 
 public class MountianSpider {
 
+	private byte[] data = null;
+	private String targetHost = null;
+	private String targetFilePath = null;
+	private String targetProtocol = null;
+	private String targetCode = null;
+	private String targetCodeEnd = null;
+	private String savePath = null;
+	private String saveExtension = null;
+
+	Messages mg = new Messages();
+
 	/**
 	 * Empty constructor to build an instance
 	 */
@@ -15,12 +26,14 @@ public class MountianSpider {
 	/**
 	 * This method contains the instance of Mountain spider and calls the 
 	 * process function 
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
 
 		MountianSpider testSpider = new MountianSpider();
 		testSpider.process();
+
 	}
 
 	/**
@@ -29,20 +42,79 @@ public class MountianSpider {
 	 * configuration file.
 	 */
 	private void process() {
-		byte[] data = null;
-		String targetHost = null;
-		String targetFilePath = null;
-		String targetProtocol = null;
-		String targetCode = null;
-		String targetCodeEnd = null;
-		String savePath = null;
-		String saveExtension = null;
 
+		//Loads config file and sets search parameters
+		loadSearchParameter();
+
+		try{
+			//Connects to target website and loads byte array data
+			ConnectionManager cm = new ConnectionManager();
+			data = cm.getData(cm.connectTargetWebsite(targetHost, targetFilePath, 
+					targetProtocol, mg));
+
+			//parses the byte array for the target code
+			DataParser dp = new DataParser(data, targetCode, targetCodeEnd);
+			List<String> secondaryFilePath = dp.ParseForTarget(mg);
+
+			//iterates over secondary file list and saves data 
+			saveFilesSecondaryTarget(secondaryFilePath, cm);
+
+		}catch (NullPointerException np){
+			mg.displayMessages(mg.NULL_ENCOUNTERED);
+		}
+
+
+	}
+
+	/**
+	 * This method iterates over the list of secondary targets and writes out
+	 * the contents to a file on the local machine.  
+	 * 
+	 * @param secondaryFilePath The list of secondary targets
+	 * @param cm the connection manager
+	 * 
+	 */
+	private void saveFilesSecondaryTarget(List<String> secondaryFilePath, ConnectionManager cm) {
+
+		//iterate over list for new targets
+		for (int i =0; i < secondaryFilePath.size(); i++ ) {
+
+			targetFilePath = secondaryFilePath.get(i);
+			//connect to new target
+			data = cm.getData(cm.connectTargetWebsite(targetHost, targetFilePath, 
+					targetProtocol, mg));
+
+			//saving message
+			System.out.println(mg.displayMessages(mg.SAVING));
+			
+			FileManager fm = new FileManager();
+
+			//checks for home or root links name and assigns default
+			if (secondaryFilePath.get(i).equals("/")){
+				fm.setName("home");
+			}else{
+				fm.setName(secondaryFilePath.get(i));
+			}
+
+			fm.setExtension(saveExtension);
+			fm.setPath(savePath);
+			fm.saveFile(data);
+		}
+
+	}
+
+	/**
+	 * This method loads the search parameters from the config file into the 
+	 * @param mg2 
+	 * @return
+	 */
+	private ConfigFileLoader loadSearchParameter() {
 		//loads config file and sets up setters for filling data
 		ConfigFileLoader cfl = new ConfigFileLoader();
-		cfl.configData();
+		cfl.configData(mg);
 
 		//setting configuration variables to spider variables
+
 		targetProtocol = cfl.getTargetProtocol();
 		targetHost = cfl.getTargetHost();
 		targetFilePath = cfl.getTargetFilePath();
@@ -51,48 +123,6 @@ public class MountianSpider {
 		savePath = cfl.getSavePath();
 		saveExtension = cfl.getSaveExtension();
 
-		//TODO remove
-		System.out.println("target website from config file" + targetProtocol + targetHost + targetFilePath);
-		
-		//Connects to target website and loads byte array data
-		ConnectionManager cm = new ConnectionManager();
-		data = cm.getData(cm.connectTargetWebsite(targetHost, targetFilePath, 
-				targetProtocol));
-		
-		//TODO remove 
-		System.out.println("byet stream lenth: " + data.length);
-		
-		//parses the byte array for the target code
-		DataParser dp = new DataParser(data, targetCode, targetCodeEnd);
-		List<String> secondaryFilePath = dp.ParseForTarget();
-
-		//iterate over list for new targets
-		for (int i =0; i < secondaryFilePath.size(); i++ ) {
-			
-			targetFilePath = secondaryFilePath.get(i);
-			//connect to new target
-			data = cm.getData(cm.connectTargetWebsite(targetHost, targetFilePath, 
-					targetProtocol));
-			
-			//TODO write HTML to new file
-			
-			//TODO remove code
-			System.out.println(secondaryFilePath.get(i));
-			System.out.println("write to file BOOOOOM");
-			FileManager fm = new FileManager();
-			
-			//checks for home or root links name and assigns default
-			if (secondaryFilePath.get(i).equals("/")){
-				fm.setName("home");
-			}else{
-			fm.setName(secondaryFilePath.get(i));
-			}
-			
-			fm.setExtension(saveExtension);
-			fm.setPath(savePath);
-			fm.saveFile(data);
-		}
-			
-
+		return cfl;
 	}
 }

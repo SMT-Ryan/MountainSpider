@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package com.riker.MountianSpider;
 
 import java.io.FileNotFoundException;
@@ -36,9 +34,9 @@ public class FileManager {
 	}
 
 	public void saveFile(byte[] data){
-		
+
 		String dataString = new String(data);
-		
+
 		try (PrintStream out = new PrintStream(new FileOutputStream(path + name + "." + extension))) {
 			out.print(dataString);
 		} catch (FileNotFoundException e) {

@@ -41,15 +41,21 @@ public class ConnectionManager {
 	 * @param targetUri The target location may need more then a simple domain 
 	 * 		name to fine its target.
 	 * @param targetProtocol The target locations protocol.
+	 * @param mg 
 	 * @return This method will return the input stream if the connection was 
 	 * successful. This method will return null if the input stream is not 
 	 * successful. 
 	 */
 	public InputStream connectTargetWebsite(String targetDomainName, String targetUri, 
-			String targetProtocol){
+			String targetProtocol, Messages mg){
 
 		//opens the target URL
 		try{
+			
+			if (targetProtocol == null || targetDomainName == null || 
+					targetUri== null){
+				mg.displayMessages(mg.NULL_ENCOUNTERED);
+			}else{			
 			URL targetUrl = new URL(targetProtocol + targetDomainName 
 					+ targetUri);
 
@@ -59,6 +65,7 @@ public class ConnectionManager {
 			InputStream in = targetUrl.openStream();
 
 			return in;
+			}
 
 		}catch (IOException ex) {
 			//TODO error message

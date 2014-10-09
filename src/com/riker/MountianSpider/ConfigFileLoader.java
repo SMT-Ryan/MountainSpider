@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.riker.MountianSpider;
 
 import java.io.BufferedReader;
@@ -34,7 +31,8 @@ public class ConfigFileLoader {
 	private final String SAVE_EXTENSION = "saveExtension";
 
 	/**
-	 * empty constructor
+	 * This constructor makes an instance of the ConfigFileLoader class.
+	 * @param mg 
 	 */
 	public ConfigFileLoader() {
 		// TODO Auto-generated constructor stub
@@ -43,8 +41,9 @@ public class ConfigFileLoader {
 	/**
 	 * locates the configuration file in the scripts folder, and loads the 
 	 * file as a hash map
+	 * @param mg 
 	 */
-	public void configData(){
+	public void configData(Messages mg){
 
 		try{
 			int separator = 0;
@@ -52,6 +51,9 @@ public class ConfigFileLoader {
 					"scripts/MountainSpider.Property"));
 			String line = br.readLine();
 
+			//iterate over each line in the config file and load the has map
+			//with keys from the left side of the =' and values from the right 
+			//side.
 			while (line != null) {
 				separator = line.indexOf("='");
 				if (separator != 0 && separator != -1){
@@ -63,15 +65,19 @@ public class ConfigFileLoader {
 			}
 			br.close();
 		}catch (IOException e){
+			
+			System.out.println(mg.displayMessages(mg.FILE_NOT_FOUND_ERROR));
 			//TODO error message
-			System.out.println("file not found");
+
 		}
 
 	}
 
 	/**
-	 * iterates over the map until the key matches and returns the value
-	 * @return value of key
+	 * This method iterates over the map until the key matches and returns 
+	 * the value
+	 * @return string value associated with the searched for key, or null
+	 * if the key is not found.
 	 */
 	public String searchMap(String searchKey){
 
@@ -84,15 +90,19 @@ public class ConfigFileLoader {
 	}
 
 	/**
-	 * returns the map value of save file extension.
+	 * returns the string value of map location associated with the SAVE 
+	 * EXTENSION key.
+	 * @return string
 	 */
 	public String getSaveExtension(){
 
 		return searchMap(SAVE_EXTENSION);
 	}
-	
+
 	/**
-	 * returns the map value of save file path.
+	 * returns the string value of map location associated with the SAVE PATH 
+	 * key.
+	 * @return a string
 	 */
 	public String getSavePath(){
 
@@ -100,7 +110,9 @@ public class ConfigFileLoader {
 	}
 
 	/**
-	 * returns the map value of target file path.
+	 * returns the string value of map location associated with the TARGET 
+	 * SEARCH CODE DELIMITER key.
+	 * @return a string
 	 */
 	public String getTargetCodeEnd(){
 
@@ -108,7 +120,9 @@ public class ConfigFileLoader {
 	}
 
 	/**
-	 * returns the map value of target file path.
+	 * returns the string value of map location associated with the TARGET 
+	 * SEARCH CODE key.
+	 * @return a string
 	 */
 	public String getTargetCode(){
 
@@ -116,7 +130,9 @@ public class ConfigFileLoader {
 	}
 
 	/**
-	 * returns the map value of target file path.
+	 * returns the string value of map location associated with the TARGET 
+	 * FILE PATH key.
+	 * @return a string
 	 */
 	public String getTargetFilePath(){
 
@@ -124,7 +140,9 @@ public class ConfigFileLoader {
 	}
 
 	/**
-	 * returns the map value of target host.
+	 * returns the string value of map location associated with the TARGET 
+	 * HOST key.
+	 * @return a string
 	 */
 	public String getTargetHost(){
 
@@ -133,7 +151,9 @@ public class ConfigFileLoader {
 
 
 	/**
-	 * returns the map value of target port.
+	 * returns the string value of map location associated with the TARGET 
+	 * port key.
+	 * @return a string
 	 */
 	public String getTargetPort(){
 
@@ -141,21 +161,25 @@ public class ConfigFileLoader {
 	}
 
 	/**
-	 * returns the map value of target protocol.
+	 * returns the string value of map location associated with the TARGET 
+	 * PROTOCOL key.
+	 * @return a string
 	 */
 	public String getTargetProtocol(){
 		return searchMap(TARGET_PROTOCOL);
 	}
 
 	/**
-	 * @return the properties
+	 * returns the hash map of keys and values loaded from the file loader.
+	 * @return a hash map
 	 */
 	public Map<String, String> getProprties() {
 		return properties;
 	}
 
 	/**
-	 * @param proprties the properties to set
+	 * sets the hash map of keys and values
+	 * @param proprties the altered hash map
 	 */
 	public void setProprties(Map<String, String> proprties) {
 		this.properties = proprties;

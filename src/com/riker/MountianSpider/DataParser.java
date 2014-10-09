@@ -51,15 +51,14 @@ public class DataParser {
 	/**
 	 * This method checks the byte array from the parent class for the required 
 	 * starting and ending string.  The substrings are added to a list.   
+	 * @param mg 
 	 * @return 
 	 */
-	public List<String> ParseForTarget(){
+	public List<String> ParseForTarget(Messages mg){
 
 		String dataString = new String(data);
-		//TODO lots to remove 
-		System.out.println(this.target + " :: " + this.targetEnd);
-		//
-		//System.out.println(dataString);
+
+		System.out.println(mg.displayMessages(mg.PARSING));
 		
 		int i = 0;
 		int t = 0;
@@ -69,16 +68,10 @@ public class DataParser {
 			t = dataString.indexOf(this.target, i);
 			int start = t + this.target.length();
 			if (t == -1) {
-				
-				//TODO remove 
-				System.out.println("Break t: " + t);
 				break;
 			}
 			int end = dataString.indexOf(this.targetEnd, start);
 			secondaryTargetFilePath.add(dataString.substring(start, end));
-		
-			//TODO remove
-			System.out.println("parser substring: " + dataString.substring(start, end).toString());
 		
 			i = end + 1;  
 		}

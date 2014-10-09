@@ -35,6 +35,8 @@ public class MountianSpider {
 		String targetProtocol = null;
 		String targetCode = null;
 		String targetCodeEnd = null;
+		String savePath = null;
+		String saveExtension = null;
 
 		//loads config file and sets up setters for filling data
 		ConfigFileLoader cfl = new ConfigFileLoader();
@@ -46,8 +48,8 @@ public class MountianSpider {
 		targetFilePath = cfl.getTargetFilePath();
 		targetCode = cfl.getTargetCode();
 		targetCodeEnd = cfl.getTargetCodeEnd();
-		savePath
-		saveExtension
+		savePath = cfl.getSavePath();
+		saveExtension = cfl.getSaveExtension();
 
 		//TODO remove
 		System.out.println("target website from config file" + targetProtocol + targetHost + targetFilePath);
@@ -86,8 +88,8 @@ public class MountianSpider {
 			fm.setName(secondaryFilePath.get(i));
 			}
 			
-			fm.setExtension("html");
-			fm.setPath("savedfiles/");
+			fm.setExtension(saveExtension);
+			fm.setPath(savePath);
 			fm.saveFile(data);
 		}
 			

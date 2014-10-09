@@ -30,6 +30,8 @@ public class ConfigFileLoader {
 	private final String TARGET_FILE_PATH = "targetFilePath";
 	private final String TARGET_SEARCH_CODE = "targetCode";
 	private final String TARGET_SEARCH_CODE_DELIMITER = "targetCodeEnd";
+	private final String SAVE_PATH = "savePath";
+	private final String SAVE_EXTENSION = "saveExtension";
 
 	/**
 	 * empty constructor
@@ -64,7 +66,7 @@ public class ConfigFileLoader {
 			//TODO error message
 			System.out.println("file not found");
 		}
-		
+
 	}
 
 	/**
@@ -72,7 +74,7 @@ public class ConfigFileLoader {
 	 * @return value of key
 	 */
 	public String searchMap(String searchKey){
-		
+
 		for (Map.Entry<String, String> entry : properties.entrySet()) {
 			if (searchKey.equals(entry.getKey())){
 				return entry.getValue();
@@ -80,55 +82,71 @@ public class ConfigFileLoader {
 		}
 		return null;
 	}
+
+	/**
+	 * returns the map value of save file extension.
+	 */
+	public String getSaveExtension(){
+
+		return searchMap(SAVE_EXTENSION);
+	}
 	
+	/**
+	 * returns the map value of save file path.
+	 */
+	public String getSavePath(){
+
+		return searchMap(SAVE_PATH);
+	}
+
 	/**
 	 * returns the map value of target file path.
 	 */
 	public String getTargetCodeEnd(){
-		 
+
 		return searchMap(TARGET_SEARCH_CODE_DELIMITER);
 	}
-	
+
 	/**
 	 * returns the map value of target file path.
 	 */
 	public String getTargetCode(){
-		 
+
 		return searchMap(TARGET_SEARCH_CODE);
 	}
-	
+
 	/**
 	 * returns the map value of target file path.
 	 */
 	public String getTargetFilePath(){
-		 
+
 		return searchMap(TARGET_FILE_PATH);
 	}
-	
+
 	/**
 	 * returns the map value of target host.
 	 */
 	public String getTargetHost(){
-		 
+
 		return searchMap(TARGET_HOST);
 	}
-	
-	
+
+
 	/**
 	 * returns the map value of target port.
 	 */
 	public String getTargetPort(){
-		 
+
 		return searchMap(TARGET_PORT);
 	}
-	
+
 	/**
 	 * returns the map value of target protocol.
 	 */
 	public String getTargetProtocol(){
 		return searchMap(TARGET_PROTOCOL);
 	}
-	
+
 	/**
 	 * @return the properties
 	 */

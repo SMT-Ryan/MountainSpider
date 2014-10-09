@@ -109,7 +109,7 @@ public class ConnectionManager {
 			uc.setDoOutput(true);
 			uc.setInstanceFollowRedirects(false);
 			headerMap = uc.getHeaderFields();
-
+			
 			uc.connect();
 			return headerMap;
 		}catch ( UnknownHostException ex){

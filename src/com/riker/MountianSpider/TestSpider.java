@@ -3,12 +3,17 @@ package com.riker.MountianSpider;
 
 public class TestSpider {
 
-	
+	/**
+	 * 
+	 */
 	public TestSpider() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
-
+/**
+ * 
+ * @param args
+ */
 	public static void main(String[] args) {
 		byte[] data = null;
 		String targetHost = null;
@@ -17,15 +22,22 @@ public class TestSpider {
 		String targetCode = null;
 		String targetCodeEnd = null;
 		
-		//TODO sets the test data to example.com replace with config file method
-		targetProtocol = "http://";
-		targetHost = "www.siliconmtn.com/";
-		targetFilePath = "";
-		targetCode = "l1\" href=\"";
-		targetCodeEnd = "\"";
-		
 		ConfigFileLoader cfl = new ConfigFileLoader();
 		cfl.configData();
+		
+		//setting configuration variables
+		targetProtocol = cfl.getTargetProtocol();
+		targetHost = cfl.getTargetHost();
+		targetFilePath = cfl.getTargetFilePath();
+		targetCode = cfl.getTargetCode();
+		targetCodeEnd = cfl.getTargetCodeEnd();
+		
+		//TODO remove testing code
+		System.out.println(targetProtocol);
+		System.out.println(targetHost);
+		System.out.println(targetFilePath);
+		System.out.println(targetCode);
+		System.out.println(targetCodeEnd);
 
 		//TODO might also want a message class again
 		System.out.println("started program \n");
@@ -37,7 +49,7 @@ public class TestSpider {
 		//parses the byte array for the target code
 		DataParser dp = new DataParser(data, targetCode, targetCodeEnd);
 		dp.ParseForTarget();
-		
+
 		//iter over list for new targets
 		
 		//write html out to a new file

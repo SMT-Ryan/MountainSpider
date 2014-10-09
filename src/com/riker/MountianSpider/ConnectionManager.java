@@ -41,7 +41,7 @@ public class ConnectionManager {
 	 * @param targetUri The target location may need more then a simple domain 
 	 * 		name to fine its target.
 	 * @param targetProtocol The target locations protocol.
-	 * @param mg 
+	 * @param mg the message map used to communicate with the user
 	 * @return This method will return the input stream if the connection was 
 	 * successful. This method will return null if the input stream is not 
 	 * successful. 
@@ -54,7 +54,7 @@ public class ConnectionManager {
 			
 			if (targetProtocol == null || targetDomainName == null || 
 					targetUri== null){
-				mg.displayMessages(mg.NULL_ENCOUNTERED);
+				System.out.println(mg.displayMessages(mg.NULL_ENCOUNTERED));
 			}else{			
 			URL targetUrl = new URL(targetProtocol + targetDomainName 
 					+ targetUri);
@@ -63,7 +63,7 @@ public class ConnectionManager {
 			headerMap = setHeader(targetUrl, headerMap);
 
 			InputStream in = targetUrl.openStream();
-
+			System.out.println(mg.displayMessages(mg.CONNECTED));
 			return in;
 			}
 
@@ -126,14 +126,11 @@ public class ConnectionManager {
 	}
 
 	/**
-	 * This method displays the header data stored in the headerMap
+	 * This method displays the http GET header data stored in the headerMap
 	 * 
 	 * @param headerMap current header map
 	 */
 	public void printHeader(Map<String, List<String>> headerMap) {
-
-		//TODO remove when done testing
-		System.out.println("Printing Header*********************\n");
 
 		for (Map.Entry<String, List<String>> entry : headerMap.entrySet()) {
 			System.out.println("Key : " + entry.getKey() 

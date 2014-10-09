@@ -43,6 +43,8 @@ public class MountianSpider {
 	 */
 	private void process() {
 
+		System.out.println(mg.displayMessages(mg.WELCOME));
+		
 		//Loads config file and sets search parameters
 		loadSearchParameter();
 
@@ -51,13 +53,14 @@ public class MountianSpider {
 			ConnectionManager cm = new ConnectionManager();
 			data = cm.getData(cm.connectTargetWebsite(targetHost, targetFilePath, 
 					targetProtocol, mg));
+			System.out.println(mg.displayMessages(mg.PRIMARY_TARGET));
 
 			//parses the byte array for the target code
 			DataParser dp = new DataParser(data, targetCode, targetCodeEnd);
 			List<String> secondaryFilePath = dp.ParseForTarget(mg);
 
 			//iterates over secondary file list and saves data 
-			saveFilesSecondaryTarget(secondaryFilePath, cm);
+			saveSecondaryTargetFiles(secondaryFilePath, cm);
 
 		}catch (NullPointerException np){
 			mg.displayMessages(mg.NULL_ENCOUNTERED);
@@ -74,13 +77,15 @@ public class MountianSpider {
 	 * @param cm the connection manager
 	 * 
 	 */
-	private void saveFilesSecondaryTarget(List<String> secondaryFilePath, ConnectionManager cm) {
+	private void saveSecondaryTargetFiles(List<String> secondaryFilePath, 
+			ConnectionManager cm) {
 
 		//iterate over list for new targets
 		for (int i =0; i < secondaryFilePath.size(); i++ ) {
 
 			targetFilePath = secondaryFilePath.get(i);
 			//connect to new target
+			System.out.println(mg.displayMessages(mg.SECONDARY_TARGET));
 			data = cm.getData(cm.connectTargetWebsite(targetHost, targetFilePath, 
 					targetProtocol, mg));
 
@@ -101,6 +106,8 @@ public class MountianSpider {
 			fm.saveFile(data);
 		}
 
+		System.out.println(mg.displayMessages(mg.COMPLETE));
+		
 	}
 
 	/**

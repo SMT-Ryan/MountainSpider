@@ -4,5 +4,7 @@ targetProtocol='http://
 targetPort='80
 targetHost='www.siliconmtn.com
 targetFilePath='
-targetCode='l1\" href=\"
-targetCodeEnd='\"
+targetCode='l1" href="
+targetCodeEnd='"
+savePath='savedfiles/
+saveExtension='html

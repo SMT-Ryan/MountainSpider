@@ -8,8 +8,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-
 /****************************************************************************
  * <b>Title</b>: ConfigFileLoader.java <p/>
  * <b>Project</b>: Mountain Spider <p/>
@@ -41,7 +39,8 @@ public class ConfigFileLoader {
 	}
 
 	/**
-	 * locates the config file in the scripts folder, and loads the file as a hash map
+	 * locates the configuration file in the scripts folder, and loads the 
+	 * file as a hash map
 	 */
 	public void configData(){
 

@@ -4,10 +4,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
+
+import Logger.LoggerShare;
 
 import com.riker.user_communication.Messages;
 
@@ -24,8 +27,7 @@ import com.riker.user_communication.Messages;
  * @since Oct 6, 2014<p/>
  * @updates:
  ****************************************************************************/
-public class ConnectionManager {
-
+public class ConnectionManager extends LoggerShare {
 	private URL targetUrl = null;
 	private Map<String, List<String>> headerMap = null;
 	public static final String USER_AGENT_INTERNET_EXPLORER = 
@@ -46,36 +48,27 @@ public class ConnectionManager {
 	 * @param targetUri The target location may need more then a simple domain 
 	 * 		name to fine its target.
 	 * @param targetProtocol The target locations protocol.
-	 * @param mg the message map used to communicate with the user
 	 * @return This method will return the input stream if the connection was 
 	 * successful. This method will return null if the input stream is not 
 	 * successful. 
+	 * @throws IOException thrown if URL contains null pointers and thrown if 
+	 * input stream not established
 	 */
 	public InputStream connectTargetWebsite(String targetDomainName, 
-			String targetUri, String targetProtocol, Messages mg){
+			String targetUri, String targetProtocol) throws IOException{
 
 		//opens the target URL
-		try{
 
-			if (targetProtocol == null || targetDomainName == null || 
-					targetUri== null){
-				System.out.println(mg.displayMessages(mg.NULL_ENCOUNTERED));
-			}else{			
-				URL targetUrl = new URL(targetProtocol + targetDomainName 
-						+ targetUri);
+		URL targetUrl = new URL(targetProtocol + targetDomainName 
+				+ targetUri);
 
-				//sets the header map
-				headerMap = setHeader(targetUrl, headerMap);
+		//sets the header map
+		headerMap = setHeader(targetUrl, headerMap);
 
-				InputStream in = targetUrl.openStream();
-				System.out.println(mg.displayMessages(mg.CONNECTED));
-				return in;
-			}
+		InputStream in = targetUrl.openStream();
+		log.debug("Connection Manager has a connection");
+		return in;
 
-		}catch (IOException ex) {
-			System.out.println(mg.displayMessages(mg.CONNECTION_ERROR));
-		}
-		return null;
 	}
 
 	/**
@@ -83,20 +76,18 @@ public class ConnectionManager {
 	 * 
 	 * @param in an active input stream from the target.
 	 * @return a byte array containing bit encoded data from the web source.
+	 * @throws IOException 
 	 * 
 	 */
-	public byte[] getData(InputStream in, Messages mg) {
+	public byte[] getData(InputStream in) throws IOException {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		int t;
 
-		try{
-			while (( t=in.read()) != -1) {
-				baos.write(t);
-			}
-		}catch (IOException ex){
-			System.out.println(mg.displayMessages(mg.CONNECTION_ERROR));
+		while (( t=in.read()) != -1) {
+			baos.write(t);
 		}
+
 		return baos.toByteArray();
 	}
 
@@ -112,22 +103,19 @@ public class ConnectionManager {
 	 */
 	public Map<String, List<String>> setHeader(URL targetUrl, 
 			Map<String, List<String>> headerMap ) throws IOException{
-		try {
-			System.setProperty(USER_AGENT_PROPERTY_NAME, 
-					USER_AGENT_INTERNET_EXPLORER);
-			HttpURLConnection uc = (HttpURLConnection) 
-					targetUrl.openConnection();
-			uc.setDoInput(true);
-			uc.setDoOutput(true);
-			uc.setInstanceFollowRedirects(false);
-			headerMap = uc.getHeaderFields();
 
-			uc.connect();
-			return headerMap;
-		}catch ( UnknownHostException ex){
-			//TODO error message
-			return headerMap;
-		}
+		System.setProperty(USER_AGENT_PROPERTY_NAME, 
+				USER_AGENT_INTERNET_EXPLORER);
+		HttpURLConnection uc = (HttpURLConnection) 
+				targetUrl.openConnection();
+		uc.setDoInput(true);
+		uc.setDoOutput(true);
+		uc.setInstanceFollowRedirects(false);
+		headerMap = uc.getHeaderFields();
+
+		uc.connect();
+		return headerMap;
+
 	}
 
 	/**

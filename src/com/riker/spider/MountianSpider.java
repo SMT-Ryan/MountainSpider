@@ -6,8 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import Logger.LoggerShare;
 
 import com.riker.configuration.ConfigFileLoader;
 import com.riker.connection.ConnectionManager;
@@ -15,8 +14,8 @@ import com.riker.file.FileManager;
 import com.riker.parser.DataParser;
 import com.riker.user_communication.Messages;
 
-public class MountianSpider {
-	//private static Logger log = Logger.getLogger(MountianSpider.class);
+public class MountianSpider extends LoggerShare {
+	
 	private byte[] data = null;
 	private String targetHost = null;
 	private String targetFilePath = null;
@@ -26,7 +25,6 @@ public class MountianSpider {
 	private String savePath = null;
 	private String saveExtension = null;
 	private final String CONFIG_FILE_PATH = "scripts/MountainSpider.Property";
-	//final static String LOGGER_PATH = "scripts/log4j.properties";
 	private String KEY_SEPARATOR = "='";
 
 
@@ -46,7 +44,6 @@ public class MountianSpider {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		//PropertyConfigurator.configure(LOGGER_PATH);
 
 		MountianSpider testSpider = new MountianSpider();
 		testSpider.process();
@@ -68,8 +65,11 @@ public class MountianSpider {
 		try{
 			//Connects to target website and loads byte array data
 			ConnectionManager cm = new ConnectionManager();
+			
 			data = cm.getData(cm.connectTargetWebsite(targetHost, 
-					targetFilePath, targetProtocol, mg), mg);
+					targetFilePath, targetProtocol));
+			
+			
 			System.out.println(mg.displayMessages(mg.PRIMARY_TARGET));
 
 			//parses the byte array for the target code
@@ -79,8 +79,10 @@ public class MountianSpider {
 			//iterates over secondary file list and saves data 
 			saveSecondaryTargetFiles(secondaryFilePath, cm);
 
-		}catch (NullPointerException np){
-			mg.displayMessages(mg.NULL_ENCOUNTERED);
+		}catch (NullPointerException | IOException np){
+			log.error("An error has occured in the process method");
+			np.printStackTrace();
+			
 		}
 
 
@@ -104,9 +106,16 @@ public class MountianSpider {
 			targetFilePath = secondaryFilePath.get(i);
 			//connect to new target
 			System.out.println(mg.displayMessages(mg.SECONDARY_TARGET));
-			data = cm.getData(cm.connectTargetWebsite(targetHost, 
-					targetFilePath, targetProtocol, mg), mg);
+			
+			try {
+				data = cm.getData(cm.connectTargetWebsite(targetHost, 
+						targetFilePath, targetProtocol));
+			} catch (IOException e1) {
+				log.error("An error has occured in the secondary file loop");
+				e1.printStackTrace();
+			}
 
+			
 			//saving message
 			System.out.println(mg.displayMessages(mg.SAVING));
 

@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import Logger.LoggerShare;
+
 import com.riker.user_communication.Messages;
 
 /****************************************************************************
@@ -20,7 +22,7 @@ import com.riker.user_communication.Messages;
  * @since Oct 8, 2014<p/>
  * @updates:
  ****************************************************************************/
-public class DataParser {
+public class DataParser extends LoggerShare {
 
 	private byte[] data = null;
 	private String target = null;
@@ -56,11 +58,11 @@ public class DataParser {
 	 * @param mg 
 	 * @return the list of strings as searched for targets.
 	 */
-	public List<String> ParseForTarget(Messages mg){
+	public List<String> ParseForTarget(Messages mg) {
 
 		String dataString = new String(data);
 
-		//TODO Log.info("parsing the current byte array for target data");
+		log.info("Started parsing");
 
 		int i = 0;
 		int t = 0;

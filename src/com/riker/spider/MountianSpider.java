@@ -4,6 +4,7 @@ package com.riker.spider;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import com.riker.configuration.ConfigFileLoader;
 import com.riker.connection.ConnectionManager;
@@ -12,7 +13,7 @@ import com.riker.parser.DataParser;
 import com.riker.user_communication.Messages;
 
 public class MountianSpider {
-
+	private static Logger log = Logger.getLogger(MountianSpider.class);
 	private byte[] data = null;
 	private String targetHost = null;
 	private String targetFilePath = null;
@@ -21,7 +22,10 @@ public class MountianSpider {
 	private String targetCodeEnd = null;
 	private String savePath = null;
 	private String saveExtension = null;
+	private final String CONFIG_FILE_PATH = "scripts/MountainSpider.Property";
+	//final static String LOGGER_PATH = "";
 
+	
 	Messages mg = new Messages();
 
 	/**
@@ -38,10 +42,11 @@ public class MountianSpider {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		final Logger logger = Logger.getLogger(MountianSpider.class);
+		PropertyConfigurator.configure("scripts/log4j.properties");
+
 		MountianSpider testSpider = new MountianSpider();
 		testSpider.process();
-logger.info("this is working i think");
+		log.info("this is working i think");
 	}
 
 	/**
@@ -126,7 +131,6 @@ logger.info("this is working i think");
 	 */
 	private ConfigFileLoader loadSearchParameter() {
 		//loads config file and sets up setters for filling data
-	 final String CONFIG_FILE_PATH = "scripts/MountainSpider.Property";
 		ConfigFileLoader cfl = new ConfigFileLoader();
 		cfl.setConfigFilePath(CONFIG_FILE_PATH);
 		cfl.configData(mg);

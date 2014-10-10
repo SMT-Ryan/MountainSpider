@@ -1,6 +1,8 @@
 
 package com.riker.spider;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -25,7 +27,7 @@ public class MountianSpider {
 	private final String CONFIG_FILE_PATH = "scripts/MountainSpider.Property";
 	//final static String LOGGER_PATH = "";
 
-	
+
 	Messages mg = new Messages();
 
 	/**
@@ -65,8 +67,8 @@ public class MountianSpider {
 		try{
 			//Connects to target website and loads byte array data
 			ConnectionManager cm = new ConnectionManager();
-			data = cm.getData(cm.connectTargetWebsite(targetHost, targetFilePath, 
-					targetProtocol, mg), mg);
+			data = cm.getData(cm.connectTargetWebsite(targetHost, 
+					targetFilePath, targetProtocol, mg), mg);
 			System.out.println(mg.displayMessages(mg.PRIMARY_TARGET));
 
 			//parses the byte array for the target code
@@ -81,7 +83,7 @@ public class MountianSpider {
 		}
 
 
-	}
+	}   
 
 	/**
 	 * This method iterates over the list of secondary targets and writes out
@@ -96,7 +98,8 @@ public class MountianSpider {
 
 		//iterate over list for new targets
 		for (int i =0; i < secondaryFilePath.size(); i++ ) {
-
+			String name = null;
+			
 			targetFilePath = secondaryFilePath.get(i);
 			//connect to new target
 			System.out.println(mg.displayMessages(mg.SECONDARY_TARGET));
@@ -110,14 +113,31 @@ public class MountianSpider {
 
 			//checks for home or root links name and assigns default
 			if (secondaryFilePath.get(i).equals("/")){
-				fm.setName("home");
+				name = "/home";
 			}else{
-				fm.setName(secondaryFilePath.get(i));
+				name = secondaryFilePath.get(i);
 			}
 
-			fm.setExtension(saveExtension);
-			fm.setPath(savePath);
-			fm.saveFile(data);
+			StringBuilder sb = new StringBuilder();
+			sb.append(savePath);
+			sb.append(name);
+			sb.append(".");
+			sb.append(saveExtension);
+			
+			fm.setName(sb.toString());
+			log.debug("string builders value is: " + sb.toString());
+			try {
+				fm.saveFile(data);
+				fm.setFileLocation(savePath);
+				log.debug("save path value is: " + savePath);
+			} catch (FileNotFoundException e) {
+				File dir = new File("savedfiles");
+				dir.mkdir();
+				i--;
+				e.printStackTrace();
+			}
+
+			
 		}
 
 		System.out.println(mg.displayMessages(mg.COMPLETE));
@@ -129,22 +149,66 @@ public class MountianSpider {
 	 * @param mg2 
 	 * @return
 	 */
-	private ConfigFileLoader loadSearchParameter() {
+	private void loadSearchParameter() {
 		//loads config file and sets up setters for filling data
 		ConfigFileLoader cfl = new ConfigFileLoader();
 		cfl.setConfigFilePath(CONFIG_FILE_PATH);
 		cfl.configData(mg);
 
 		//setting configuration variables to spider variables
+		if (cfl.getProperties().containsKey("targetProtocol")){
+			targetProtocol = cfl.getProperties().get("targetProtocol");
+			log.debug("target protocol is: " + targetProtocol);
+		}else {
+			log.error("target protocol not found throw missing data exception");
+		}
 
-		targetProtocol = cfl.getTargetProtocol();
-		targetHost = cfl.getTargetHost();
-		targetFilePath = cfl.getTargetFilePath();
-		targetCode = cfl.getTargetCode();
-		targetCodeEnd = cfl.getTargetCodeEnd();
-		savePath = cfl.getSavePath();
-		saveExtension = cfl.getSaveExtension();
+		if (cfl.getProperties().containsKey("targetHost")){
+			targetHost = cfl.getProperties().get("targetHost");
+			log.debug("target host is: " + targetHost);
+		}else {
+			log.error("target host not found throw missing data exception");
+		}
 
-		return cfl;
+		if (cfl.getProperties().containsKey("targetFilePath")){
+			targetFilePath = cfl.getProperties().get("targetFilePath");
+			log.debug("target file path is: " + targetFilePath);
+		}else {
+			log.error("target host not found throw missing data exception");
+		}
+
+		if (cfl.getProperties().containsKey("targetCode")){
+			targetCode = cfl.getProperties().get("targetCode");
+			log.debug("target file path is: " + targetCode);
+		}else {
+			log.error("target search code not found throw missing data "
+					+ "exception");
+		}
+
+		if (cfl.getProperties().containsKey("targetCodeEnd")){
+			targetCodeEnd = cfl.getProperties().get("targetCodeEnd");
+			log.debug("target file path is: " + targetCodeEnd);
+		}else {
+			log.error("target end search code not found throw missing data "
+					+ "exception");
+		}
+
+		if (cfl.getProperties().containsKey("savePath")){
+			savePath = cfl.getProperties().get("savePath");
+			log.debug("target file path is: " + savePath);
+		}else {
+			log.error("target end search code not found throw missing data "
+					+ "exception");
+		}
+
+		if (cfl.getProperties().containsKey("saveExtension")){
+			saveExtension = cfl.getProperties().get("saveExtension");
+			log.debug("target file path is: " + saveExtension);
+		}else {
+			log.error("target end search code not found throw missing data "
+					+ "exception");
+		}
+
+		
 	}
 }

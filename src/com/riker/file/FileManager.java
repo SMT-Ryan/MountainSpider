@@ -22,9 +22,9 @@ import java.io.PrintStream;
 public class FileManager {
 
 
-	private String name = null;
-	private String extension = null;
-	private String path = null;
+	private String outputName = null;
+	private String fileLocation = null;
+
 
 
 	/**
@@ -34,60 +34,41 @@ public class FileManager {
 
 	}
 
-	public void saveFile(byte[] data){
+	public void saveFile(byte[] data) throws FileNotFoundException{
 
 		String dataString = new String(data);
-
-		try (PrintStream out = new PrintStream(new FileOutputStream(path + name + "." + extension))) {
+		
+		try (PrintStream out = new PrintStream
+				(new FileOutputStream(outputName))) {
 			out.print(dataString);
-		} catch (FileNotFoundException e) {
-			//if the correct directory is missing, it is made for user.
-			File dir = new File("savedfiles");
-			dir.mkdir();
-		}
+		} 
 	}
-
-	/**
-	 * @return the path
-	 */
-	public String getPath() {
-		return path;
-	}
-
-	/**
-	 * @param path the path to set
-	 */
-	public void setPath(String path) {
-		this.path = path;
-	}
-
 
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return outputName;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String outputName) {
+		this.outputName = outputName;
 	}
 
 	/**
-	 * @return the extension
+	 * @return the fileLocation
 	 */
-	public String getExtension() {
-		return extension;
+	public String getFileLocation() {
+		return fileLocation;
 	}
 
 	/**
-	 * @param extension the extension to set
+	 * @param fileLocation the fileLocation to set
 	 */
-	public void setExtension(String extension) {
-		this.extension = extension;
+	public void setFileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
 	}
-
 }

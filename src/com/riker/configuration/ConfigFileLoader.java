@@ -74,106 +74,10 @@ public class ConfigFileLoader {
 	}
 
 	/**
-	 * This method iterates over the map until the key matches and returns 
-	 * the value
-	 * @return string value associated with the searched for key, or null
-	 * if the key is not found.
-	 */
-	public String searchMap(String searchKey){
-
-		for (Map.Entry<String, String> entry : properties.entrySet()) {
-			if (searchKey.equals(entry.getKey())){
-				return entry.getValue();
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * returns the string value of map location associated with the SAVE 
-	 * EXTENSION key.
-	 * @return string
-	 */
-	public String getSaveExtension(){
-
-		return searchMap(SAVE_EXTENSION);
-	}
-
-	/**
-	 * returns the string value of map location associated with the SAVE PATH 
-	 * key.
-	 * @return a string
-	 */
-	public String getSavePath(){
-
-		return searchMap(SAVE_PATH);
-	}
-
-	/**
-	 * returns the string value of map location associated with the TARGET 
-	 * SEARCH CODE DELIMITER key.
-	 * @return a string
-	 */
-	public String getTargetCodeEnd(){
-
-		return searchMap(TARGET_SEARCH_CODE_DELIMITER);
-	}
-
-	/**
-	 * returns the string value of map location associated with the TARGET 
-	 * SEARCH CODE key.
-	 * @return a string
-	 */
-	public String getTargetCode(){
-
-		return searchMap(TARGET_SEARCH_CODE);
-	}
-
-	/**
-	 * returns the string value of map location associated with the TARGET 
-	 * FILE PATH key.
-	 * @return a string
-	 */
-	public String getTargetFilePath(){
-
-		return searchMap(TARGET_FILE_PATH);
-	}
-
-	/**
-	 * returns the string value of map location associated with the TARGET 
-	 * HOST key.
-	 * @return a string
-	 */
-	public String getTargetHost(){
-
-		return searchMap(TARGET_HOST);
-	}
-
-
-	/**
-	 * returns the string value of map location associated with the TARGET 
-	 * port key.
-	 * @return a string
-	 */
-	public String getTargetPort(){
-
-		return searchMap(TARGET_PORT);
-	}
-
-	/**
-	 * returns the string value of map location associated with the TARGET 
-	 * PROTOCOL key.
-	 * @return a string
-	 */
-	public String getTargetProtocol(){
-		return searchMap(TARGET_PROTOCOL);
-	}
-
-	/**
 	 * returns the hash map of keys and values loaded from the file loader.
 	 * @return a hash map
 	 */
-	public Map<String, String> getProprties() {
+	public Map<String, String> getProperties() {
 		return properties;
 	}
 
@@ -181,7 +85,7 @@ public class ConfigFileLoader {
 	 * sets the hash map of keys and values
 	 * @param proprties the altered hash map
 	 */
-	public void setProprties(Map<String, String> proprties) {
+	public void setProperties(Map<String, String> proprties) {
 		this.properties = proprties;
 	}
 

@@ -1,4 +1,4 @@
-package com.riker.MountianSpider;
+package com.riker.connection;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -8,6 +8,8 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
+
+import com.riker.user_communication.Messages;
 
 /****************************************************************************
  * <b>Title</b>: ConnectionManager.java <p/>

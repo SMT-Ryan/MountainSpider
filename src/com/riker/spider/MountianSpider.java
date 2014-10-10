@@ -1,9 +1,15 @@
 
-package com.riker.MountianSpider;
+package com.riker.spider;
 
 import java.util.List;
 
-import com.riker.FileConfig.ConfigFileLoader;
+import org.apache.log4j.Logger;
+
+import com.riker.configuration.ConfigFileLoader;
+import com.riker.connection.ConnectionManager;
+import com.riker.file.FileManager;
+import com.riker.parser.DataParser;
+import com.riker.user_communication.Messages;
 
 public class MountianSpider {
 
@@ -32,10 +38,10 @@ public class MountianSpider {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
+		final Logger logger = Logger.getLogger(MountianSpider.class);
 		MountianSpider testSpider = new MountianSpider();
 		testSpider.process();
-
+logger.info("this is working i think");
 	}
 
 	/**
@@ -44,6 +50,7 @@ public class MountianSpider {
 	 * configuration file.
 	 */
 	private void process() {
+
 
 		System.out.println(mg.displayMessages(mg.WELCOME));
 

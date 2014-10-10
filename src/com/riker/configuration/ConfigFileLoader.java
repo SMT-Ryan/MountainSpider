@@ -1,4 +1,4 @@
-package com.riker.FileConfig;
+package com.riker.configuration;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.riker.MountianSpider.Messages;
+import com.riker.user_communication.Messages;
 /****************************************************************************
  * <b>Title</b>: ConfigFileLoader.java <p/>
  * <b>Project</b>: Mountain Spider <p/>

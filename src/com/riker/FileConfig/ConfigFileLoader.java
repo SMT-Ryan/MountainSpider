@@ -1,10 +1,12 @@
-package com.riker.MountianSpider;
+package com.riker.FileConfig;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.riker.MountianSpider.Messages;
 /****************************************************************************
  * <b>Title</b>: ConfigFileLoader.java <p/>
  * <b>Project</b>: Mountain Spider <p/>
@@ -29,13 +31,14 @@ public class ConfigFileLoader {
 	private final String TARGET_SEARCH_CODE_DELIMITER = "targetCodeEnd";
 	private final String SAVE_PATH = "savePath";
 	private final String SAVE_EXTENSION = "saveExtension";
+	String confilFilePath = null;
 
 	/**
 	 * This constructor makes an instance of the ConfigFileLoader class.
 	 * @param mg 
 	 */
 	public ConfigFileLoader() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	/**
@@ -47,8 +50,8 @@ public class ConfigFileLoader {
 
 		try{
 			int separator = 0;
-			BufferedReader br = new BufferedReader(new FileReader(
-					"scripts/MountainSpider.Property"));
+			BufferedReader br = new BufferedReader(
+					new FileReader(confilFilePath));
 			String line = br.readLine();
 
 			//iterate over each line in the config file and load the has map
@@ -65,10 +68,7 @@ public class ConfigFileLoader {
 			}
 			br.close();
 		}catch (IOException e){
-			
 			System.out.println(mg.displayMessages(mg.FILE_NOT_FOUND_ERROR));
-			//TODO error message
-
 		}
 
 	}
@@ -183,5 +183,12 @@ public class ConfigFileLoader {
 	 */
 	public void setProprties(Map<String, String> proprties) {
 		this.properties = proprties;
+	}
+
+	/**
+	 * @param CONFIG_FILE_PATH
+	 */
+	public void setConfigFilePath(String CONFIG_FILE_PATH) {
+		confilFilePath = CONFIG_FILE_PATH;
 	}
 }

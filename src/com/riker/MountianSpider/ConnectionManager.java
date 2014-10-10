@@ -27,7 +27,10 @@ public class ConnectionManager {
 	private URL targetUrl = null;
 	private Map<String, List<String>> headerMap = null;
 	public static final String USER_AGENT_INTERNET_EXPLORER = 
-			"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)";
+			"Mozilla/5.0 (Windows; U; Windows NT 5.1; "
+			+ "en-US; rv:1.9.2.3) Gecko/20100401";
+	public static final String USER_AGENT_PROPERTY_NAME = "http.agent";
+	
 	/**
 	 * Constructs an instance of ConnectionManager.
 	 */
@@ -46,30 +49,29 @@ public class ConnectionManager {
 	 * successful. This method will return null if the input stream is not 
 	 * successful. 
 	 */
-	public InputStream connectTargetWebsite(String targetDomainName, String targetUri, 
-			String targetProtocol, Messages mg){
+	public InputStream connectTargetWebsite(String targetDomainName, 
+			String targetUri, String targetProtocol, Messages mg){
 
 		//opens the target URL
 		try{
-			
+
 			if (targetProtocol == null || targetDomainName == null || 
 					targetUri== null){
 				System.out.println(mg.displayMessages(mg.NULL_ENCOUNTERED));
 			}else{			
-			URL targetUrl = new URL(targetProtocol + targetDomainName 
-					+ targetUri);
+				URL targetUrl = new URL(targetProtocol + targetDomainName 
+						+ targetUri);
 
-			//sets the header map
-			headerMap = setHeader(targetUrl, headerMap);
+				//sets the header map
+				headerMap = setHeader(targetUrl, headerMap);
 
-			InputStream in = targetUrl.openStream();
-			System.out.println(mg.displayMessages(mg.CONNECTED));
-			return in;
+				InputStream in = targetUrl.openStream();
+				System.out.println(mg.displayMessages(mg.CONNECTED));
+				return in;
 			}
 
 		}catch (IOException ex) {
-			//TODO error message
-			ex.printStackTrace();
+			System.out.println(mg.displayMessages(mg.CONNECTION_ERROR));
 		}
 		return null;
 	}
@@ -81,7 +83,7 @@ public class ConnectionManager {
 	 * @return a byte array containing bit encoded data from the web source.
 	 * 
 	 */
-	public byte[] getData(InputStream in) {
+	public byte[] getData(InputStream in, Messages mg) {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		int t;
@@ -91,8 +93,7 @@ public class ConnectionManager {
 				baos.write(t);
 			}
 		}catch (IOException ex){
-			//TODO error message
-			ex.printStackTrace();
+			System.out.println(mg.displayMessages(mg.CONNECTION_ERROR));
 		}
 		return baos.toByteArray();
 	}
@@ -110,13 +111,15 @@ public class ConnectionManager {
 	public Map<String, List<String>> setHeader(URL targetUrl, 
 			Map<String, List<String>> headerMap ) throws IOException{
 		try {
-			System.setProperty("http.agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.3) Gecko/20100401");
-			HttpURLConnection uc = (HttpURLConnection) targetUrl.openConnection();
+			System.setProperty(USER_AGENT_PROPERTY_NAME, 
+					USER_AGENT_INTERNET_EXPLORER);
+			HttpURLConnection uc = (HttpURLConnection) 
+					targetUrl.openConnection();
 			uc.setDoInput(true);
 			uc.setDoOutput(true);
 			uc.setInstanceFollowRedirects(false);
 			headerMap = uc.getHeaderFields();
-			
+
 			uc.connect();
 			return headerMap;
 		}catch ( UnknownHostException ex){

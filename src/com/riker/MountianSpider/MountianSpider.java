@@ -3,6 +3,8 @@ package com.riker.MountianSpider;
 
 import java.util.List;
 
+import com.riker.FileConfig.ConfigFileLoader;
+
 public class MountianSpider {
 
 	private byte[] data = null;
@@ -17,7 +19,7 @@ public class MountianSpider {
 	Messages mg = new Messages();
 
 	/**
-	 * Empty constructor to build an instance
+	 * Empty constructor to create an instance
 	 */
 	public MountianSpider() {
 
@@ -44,7 +46,7 @@ public class MountianSpider {
 	private void process() {
 
 		System.out.println(mg.displayMessages(mg.WELCOME));
-		
+
 		//Loads config file and sets search parameters
 		loadSearchParameter();
 
@@ -52,7 +54,7 @@ public class MountianSpider {
 			//Connects to target website and loads byte array data
 			ConnectionManager cm = new ConnectionManager();
 			data = cm.getData(cm.connectTargetWebsite(targetHost, targetFilePath, 
-					targetProtocol, mg));
+					targetProtocol, mg), mg);
 			System.out.println(mg.displayMessages(mg.PRIMARY_TARGET));
 
 			//parses the byte array for the target code
@@ -86,12 +88,12 @@ public class MountianSpider {
 			targetFilePath = secondaryFilePath.get(i);
 			//connect to new target
 			System.out.println(mg.displayMessages(mg.SECONDARY_TARGET));
-			data = cm.getData(cm.connectTargetWebsite(targetHost, targetFilePath, 
-					targetProtocol, mg));
+			data = cm.getData(cm.connectTargetWebsite(targetHost, 
+					targetFilePath, targetProtocol, mg), mg);
 
 			//saving message
 			System.out.println(mg.displayMessages(mg.SAVING));
-			
+
 			FileManager fm = new FileManager();
 
 			//checks for home or root links name and assigns default
@@ -107,7 +109,7 @@ public class MountianSpider {
 		}
 
 		System.out.println(mg.displayMessages(mg.COMPLETE));
-		
+
 	}
 
 	/**
@@ -117,7 +119,9 @@ public class MountianSpider {
 	 */
 	private ConfigFileLoader loadSearchParameter() {
 		//loads config file and sets up setters for filling data
+	 final String CONFIG_FILE_PATH = "scripts/MountainSpider.Property";
 		ConfigFileLoader cfl = new ConfigFileLoader();
+		cfl.setConfigFilePath(CONFIG_FILE_PATH);
 		cfl.configData(mg);
 
 		//setting configuration variables to spider variables

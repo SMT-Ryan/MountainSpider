@@ -59,12 +59,12 @@ public class DataParser {
 		String dataString = new String(data);
 
 		System.out.println(mg.displayMessages(mg.PARSING));
-		
+
 		int i = 0;
 		int t = 0;
 
 		while (true) {
-			
+
 			t = dataString.indexOf(this.target, i);
 			int start = t + this.target.length();
 			if (t == -1) {
@@ -72,7 +72,7 @@ public class DataParser {
 			}
 			int end = dataString.indexOf(this.targetEnd, start);
 			secondaryTargetFilePath.add(dataString.substring(start, end));
-		
+
 			i = end + 1;  
 		}
 		return secondaryTargetFilePath;

@@ -1,6 +1,7 @@
 
 package com.riker.MountianSpider;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -40,8 +41,9 @@ public class FileManager {
 		try (PrintStream out = new PrintStream(new FileOutputStream(path + name + "." + extension))) {
 			out.print(dataString);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//if the correct directory is missing, it is made for user.
+			File dir = new File("savedfiles");
+			dir.mkdir();
 		}
 	}
 

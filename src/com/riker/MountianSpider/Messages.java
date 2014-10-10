@@ -29,6 +29,7 @@ public class Messages {
 	public final int SECONDARY_TARGET = 7;
 	public final int FILE_NOT_FOUND_ERROR = 1100;
 	public final int NULL_ENCOUNTERED = 1101;
+	public final int CONNECTION_ERROR = 1102;
 	/**
 	 * This constructor generates an instances of Messages class.
 	 */
@@ -38,8 +39,9 @@ public class Messages {
 	/**
 	 * This class manages and displays the map of messages to be displayed for
 	 *  the user.
-	 * @param key 
-	 * @return 
+	 * @param key value to be check against the map
+	 * @return a string associated with the searched for key, returns an error 
+	 * message if key is not found
 	 */
 	public String displayMessages(int key){
 		Map<Integer, String> message = new HashMap<Integer, String>();
@@ -48,7 +50,7 @@ public class Messages {
 		message.put(WELCOME, "Thanks for using Mountian Spider 1.0 \n"
 				+ "Copyright 2014 Silicon Mountian \n"
 				+ "Code by Ryan Riker \n"
-				+ "IF everything appears in order we will be web crawling "
+				+ "If everything appears in order we will be web crawling "
 				+ "shortly.");
 		message.put(NULL_ENCOUNTERED, "Unexpected null value");
 		message.put(SAVING, "Saving a file to the local machine.");
@@ -61,15 +63,16 @@ public class Messages {
 				+ "target");
 		message.put(SECONDARY_TARGET, "attempting to connect to secondary web "
 				+ "target");
-		
+		message.put(CONNECTION_ERROR, "attempting to connect has failed");
+
 		if (message.get(key) != null){
 			return message.get(key);
 		}else{
 			return new String ("something has gone horribly wrong inside "
 					+ "message class at if statment");
 		}
-		
+
 	}
-	
-	
+
+
 }

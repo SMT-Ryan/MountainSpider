@@ -30,9 +30,9 @@ public class ConnectionManager {
 	private Map<String, List<String>> headerMap = null;
 	public static final String USER_AGENT_INTERNET_EXPLORER = 
 			"Mozilla/5.0 (Windows; U; Windows NT 5.1; "
-			+ "en-US; rv:1.9.2.3) Gecko/20100401";
+					+ "en-US; rv:1.9.2.3) Gecko/20100401";
 	public static final String USER_AGENT_PROPERTY_NAME = "http.agent";
-	
+
 	/**
 	 * Constructs an instance of ConnectionManager.
 	 */

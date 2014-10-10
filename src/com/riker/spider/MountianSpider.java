@@ -48,7 +48,6 @@ public class MountianSpider {
 
 		MountianSpider testSpider = new MountianSpider();
 		testSpider.process();
-		log.info("this is working i think");
 	}
 
 	/**
@@ -95,7 +94,7 @@ public class MountianSpider {
 	 */
 	private void saveSecondaryTargetFiles(List<String> secondaryFilePath, 
 			ConnectionManager cm) {
-
+		
 		//iterate over list for new targets
 		for (int i =0; i < secondaryFilePath.size(); i++ ) {
 			String name = null;
@@ -114,6 +113,8 @@ public class MountianSpider {
 			//checks for home or root links name and assigns default
 			if (secondaryFilePath.get(i).equals("/")){
 				name = "/home";
+				log.debug("Link to the root \"/\" was encountered, the file "
+						+ "will be named home by default");
 			}else{
 				name = secondaryFilePath.get(i);
 			}
@@ -131,10 +132,11 @@ public class MountianSpider {
 				fm.setFileLocation(savePath);
 				log.debug("save path value is: " + savePath);
 			} catch (FileNotFoundException e) {
-				File dir = new File("savedfiles");
+				File dir = new File(savePath);
 				dir.mkdir();
 				i--;
-				e.printStackTrace();
+				log.debug("the save file was missing and has been created \n "
+						+ "reducing the counter by one and restarting loop");
 			}
 
 			

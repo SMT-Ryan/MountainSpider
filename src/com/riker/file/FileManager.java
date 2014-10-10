@@ -1,7 +1,6 @@
 
 package com.riker.file;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -37,7 +36,7 @@ public class FileManager {
 	public void saveFile(byte[] data) throws FileNotFoundException{
 
 		String dataString = new String(data);
-		
+
 		try (PrintStream out = new PrintStream
 				(new FileOutputStream(outputName))) {
 			out.print(dataString);

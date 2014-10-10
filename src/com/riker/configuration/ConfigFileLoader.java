@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.riker.user_communication.Messages;
 /****************************************************************************
  * <b>Title</b>: ConfigFileLoader.java <p/>
  * <b>Project</b>: Mountain Spider <p/>
@@ -23,14 +22,6 @@ import com.riker.user_communication.Messages;
 public class ConfigFileLoader {
 
 	Map<String, String> properties = new HashMap<String, String>();
-	private final String TARGET_PROTOCOL = "targetProtocol";
-	private final String TARGET_PORT = "targetPort";
-	private final String TARGET_HOST = "targetHost";
-	private final String TARGET_FILE_PATH = "targetFilePath";
-	private final String TARGET_SEARCH_CODE = "targetCode";
-	private final String TARGET_SEARCH_CODE_DELIMITER = "targetCodeEnd";
-	private final String SAVE_PATH = "savePath";
-	private final String SAVE_EXTENSION = "saveExtension";
 	String confilFilePath = null;
 
 	/**
@@ -42,39 +33,39 @@ public class ConfigFileLoader {
 	}
 
 	/**
-	 * locates the configuration file in the scripts folder, and loads the 
-	 * file as a hash map
-	 * @param mg 
+	 * Locates the configuration file in the scripts folder, and loads the 
+	 * file as a hash map with =' separating key from value.
+	 * 
+	 * @throws IOException if the config file can not be read, throws a
+	 * file not found exception if the config file can not be opened.
 	 */
-	public void configData(Messages mg){
+	public void configData(String keySeparator) throws IOException{
 
-		try{
-			int separator = 0;
-			BufferedReader br = new BufferedReader(
-					new FileReader(confilFilePath));
-			String line = br.readLine();
 
-			//iterate over each line in the config file and load the has map
-			//with keys from the left side of the =' and values from the right 
-			//side.
-			while (line != null) {
-				separator = line.indexOf("='");
-				if (separator != 0 && separator != -1){
-					//filling the property map
-					properties.put(line.substring(0, separator), 
-							line.substring(separator + 2));
-				}
-				line = br.readLine();
+		int separator = 0;
+
+		BufferedReader br = new BufferedReader(
+				new FileReader(confilFilePath));
+		String line = br.readLine();
+
+		//iterate over each line in the config file and load the has map
+		//with keys from the left side of the =' and values from the right 
+		//side.
+		while (line != null) {
+			separator = line.indexOf(keySeparator);
+			if (separator != 0 && separator != -1){
+				//filling the property map
+				properties.put(line.substring(0, separator), 
+						line.substring(separator + 2));
 			}
-			br.close();
-		}catch (IOException e){
-			System.out.println(mg.displayMessages(mg.FILE_NOT_FOUND_ERROR));
+			line = br.readLine();
 		}
-
+		br.close();
 	}
 
 	/**
-	 * returns the hash map of keys and values loaded from the file loader.
+	 * Returns the hash map of keys and values loaded from the file loader.
+	 * 
 	 * @return a hash map
 	 */
 	public Map<String, String> getProperties() {
@@ -83,6 +74,7 @@ public class ConfigFileLoader {
 
 	/**
 	 * sets the hash map of keys and values
+	 * 
 	 * @param proprties the altered hash map
 	 */
 	public void setProperties(Map<String, String> proprties) {
@@ -90,6 +82,8 @@ public class ConfigFileLoader {
 	}
 
 	/**
+	 * allows the parent class to set the location of the config file
+	 * 
 	 * @param CONFIG_FILE_PATH
 	 */
 	public void setConfigFilePath(String CONFIG_FILE_PATH) {

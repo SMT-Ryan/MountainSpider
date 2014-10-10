@@ -1,10 +1,9 @@
-/**
- * 
- */
 package com.riker.parser;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.riker.user_communication.Messages;
 
@@ -41,7 +40,7 @@ public class DataParser {
 	 * 
 	 * @param data is set to the byte array at construction.
 	 * @param target is set to the target string at construction.
-	 * @param targetEnd
+	 * @param targetEnd ends the sub string during parsing.
 	 */
 	public DataParser(byte[] data , String target, String targetEnd) {
 		this.setData(data);
@@ -52,15 +51,16 @@ public class DataParser {
 
 	/**
 	 * This method checks the byte array from the parent class for the required 
-	 * starting and ending string.  The substrings are added to a list.   
+	 * starting and ending string.  The substrings are added to a list.  
+	 *  
 	 * @param mg 
-	 * @return 
+	 * @return the list of strings as searched for targets.
 	 */
 	public List<String> ParseForTarget(Messages mg){
 
 		String dataString = new String(data);
 
-		System.out.println(mg.displayMessages(mg.PARSING));
+		//TODO Log.info("parsing the current byte array for target data");
 
 		int i = 0;
 		int t = 0;

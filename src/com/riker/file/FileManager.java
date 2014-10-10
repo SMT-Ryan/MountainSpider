@@ -33,6 +33,13 @@ public class FileManager {
 
 	}
 
+	/**
+	 * This method saves the byte array to the location in the format 
+	 * sent by the parent.
+	 * 
+	 * @param data incoming byte array
+	 * @throws FileNotFoundException if the path to save isn't correct
+	 */
 	public void saveFile(byte[] data) throws FileNotFoundException{
 
 		String dataString = new String(data);
@@ -44,6 +51,7 @@ public class FileManager {
 	}
 
 	/**
+	 * This method returns the contents of the outputName variable. 
 	 * @return the name
 	 */
 	public String getName() {
@@ -51,6 +59,7 @@ public class FileManager {
 	}
 
 	/**
+	 * This method takes an incoming string and sets it to the outputName.
 	 * @param name the name to set
 	 */
 	public void setName(String outputName) {
@@ -58,6 +67,7 @@ public class FileManager {
 	}
 
 	/**
+	 * This method returns the fileLocation variable
 	 * @return the fileLocation
 	 */
 	public String getFileLocation() {
@@ -65,6 +75,7 @@ public class FileManager {
 	}
 
 	/**
+	 * This method takes an incoming string and sets it to the fileLocation.
 	 * @param fileLocation the fileLocation to set
 	 */
 	public void setFileLocation(String fileLocation) {

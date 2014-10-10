@@ -3,6 +3,7 @@ package com.riker.spider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -15,7 +16,7 @@ import com.riker.parser.DataParser;
 import com.riker.user_communication.Messages;
 
 public class MountianSpider {
-	private static Logger log = Logger.getLogger(MountianSpider.class);
+	//private static Logger log = Logger.getLogger(MountianSpider.class);
 	private byte[] data = null;
 	private String targetHost = null;
 	private String targetFilePath = null;
@@ -25,7 +26,8 @@ public class MountianSpider {
 	private String savePath = null;
 	private String saveExtension = null;
 	private final String CONFIG_FILE_PATH = "scripts/MountainSpider.Property";
-	//final static String LOGGER_PATH = "";
+	//final static String LOGGER_PATH = "scripts/log4j.properties";
+	private String KEY_SEPARATOR = "='";
 
 
 	Messages mg = new Messages();
@@ -44,7 +46,7 @@ public class MountianSpider {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		PropertyConfigurator.configure("scripts/log4j.properties");
+		//PropertyConfigurator.configure(LOGGER_PATH);
 
 		MountianSpider testSpider = new MountianSpider();
 		testSpider.process();
@@ -135,7 +137,7 @@ public class MountianSpider {
 				File dir = new File(savePath);
 				dir.mkdir();
 				i--;
-				log.debug("the save file was missing and has been created \n "
+				log.debug("the save file was missing and has been created "
 						+ "reducing the counter by one and restarting loop");
 			}
 
@@ -155,7 +157,15 @@ public class MountianSpider {
 		//loads config file and sets up setters for filling data
 		ConfigFileLoader cfl = new ConfigFileLoader();
 		cfl.setConfigFilePath(CONFIG_FILE_PATH);
-		cfl.configData(mg);
+		
+		try {
+			cfl.configData(KEY_SEPARATOR);
+		} catch (IOException e) {
+			log.error("An error has occured, the file isnt found or the file"
+					+ " isnt readable.");
+			System.out.println(mg.displayMessages(mg.FILE_NOT_FOUND_ERROR));
+			e.printStackTrace();
+		}
 
 		//setting configuration variables to spider variables
 		if (cfl.getProperties().containsKey("targetProtocol")){

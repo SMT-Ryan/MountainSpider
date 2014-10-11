@@ -13,6 +13,22 @@ import com.riker.logger.LoggerShare;
 import com.riker.parser.DataParser;
 import com.riker.user_communication.Messages;
 
+
+/****************************************************************************
+ * <b>Title</b>: MountianSpider.java <p/>
+ * <b>Project</b>: MountianSpider <p/>
+ * <b>Description: </b> This class contains the main method and contains control 
+ * of the process, that lets allow Mountain Spider to connect with a web 
+ * source, and parse for target links, if found the targets are connected and 
+ * stored on the local drive.  
+ * <p/>
+ * <b>Copyright:</b> Copyright (c) 2014<p/>
+ * <b>Company:</b> Silicon Mountain Technologies<p/>
+ * @author Ryan Riker
+ * @version 2.0
+ * @since Oct 10, 2014<p/>
+ * @updates:
+ ****************************************************************************/
 public class MountianSpider extends LoggerShare {
 
 	private byte[] data = null;
@@ -25,6 +41,13 @@ public class MountianSpider extends LoggerShare {
 	private String saveExtension = null;
 	private final String CONFIG_FILE_PATH = "scripts/MountainSpider.Property";
 	private String KEY_SEPARATOR = "='";
+	private final String TARGET_PROTOCOL= "targetProtocol";
+	private final String TARGET_HOST ="targetHost";
+	private final String TARGET_FILE_PATH ="targetFilePath";
+	private final String TARGET_SEARCH_CODE = "targetCode";
+	private final String TARGET_END_SEARCH_CODE = "targetCodeEnd";
+	private final String SAVE_PATH ="savePath";
+	private final String SAVE_EXTENSION ="saveExtension";
 
 
 	Messages mg = new Messages();
@@ -65,8 +88,15 @@ public class MountianSpider extends LoggerShare {
 			//Connects to target website and loads byte array data
 			ConnectionManager MtSdCon = new ConnectionManager();
 
-			data = MtSdCon.getData(MtSdCon.connectTargetWebsite(targetHost, 
-					targetFilePath, targetProtocol));
+			StringBuilder sb = new StringBuilder();
+			sb.append(targetProtocol);
+			sb.append(targetHost);
+			if (!targetFilePath.isEmpty()){
+				sb.append("/"+targetFilePath);
+			}
+
+			log.debug("string builders value is: " + sb.toString());
+			data = MtSdCon.getData(MtSdCon.connectTargetWebsite(sb.toString()));
 
 
 			System.out.println(mg.displayMessages(mg.PRIMARY_TARGET));
@@ -79,7 +109,10 @@ public class MountianSpider extends LoggerShare {
 			saveSecondaryTargetFiles(secondaryFilePath, MtSdCon);
 
 		}catch (NullPointerException | IOException np){
-			log.error("An error has occured in the process method");
+			log.error("An error has occured in the process method please check"
+					+ " the config file for correct \n "
+					+ "input, the web target or the config file itself is not "
+					+ "found or non existant");
 			np.printStackTrace();
 		}
 	}   
@@ -100,12 +133,22 @@ public class MountianSpider extends LoggerShare {
 			String name = null;
 
 			targetFilePath = secondaryFilePath.get(i);
+			log.debug("secondary target path value is: " + targetFilePath);
 			//connect to new target
 			System.out.println(mg.displayMessages(mg.SECONDARY_TARGET));
 
+			StringBuilder targetStB = new StringBuilder();
+			targetStB.append(targetProtocol);
+			targetStB.append(targetHost);
+
+			if (!targetFilePath.isEmpty()){
+				targetStB.append(targetFilePath);
+			}
+
+			log.debug("string builders value is: " + targetStB.toString());
 			try {
-				data = MtSdCon.getData(MtSdCon.connectTargetWebsite(targetHost, 
-						targetFilePath, targetProtocol));
+				data = MtSdCon.getData(MtSdCon.
+						connectTargetWebsite(targetStB.toString()));
 			} catch (IOException e1) {
 				log.error("An error has occured in the secondary file loop");
 				e1.printStackTrace();
@@ -126,14 +169,14 @@ public class MountianSpider extends LoggerShare {
 				name = secondaryFilePath.get(i);
 			}
 
-			StringBuilder sb = new StringBuilder();
-			sb.append(savePath);
-			sb.append(name);
-			sb.append(".");
-			sb.append(saveExtension);
+			StringBuilder saveStB = new StringBuilder();
+			saveStB.append(savePath);
+			saveStB.append(name);
+			saveStB.append(".");
+			saveStB.append(saveExtension);
 
-			fm.setName(sb.toString());
-			log.debug("string builders value is: " + sb.toString());
+			fm.setName(saveStB.toString());
+			log.debug("string builders value is: " + saveStB.toString());
 			try {
 				fm.saveFile(data);
 				fm.setFileLocation(savePath);
@@ -166,64 +209,41 @@ public class MountianSpider extends LoggerShare {
 		} catch (IOException e) {
 			log.error("An error has occured, the file isnt found or the file"
 					+ " isnt readable.");
-			System.out.println(mg.displayMessages(mg.FILE_NOT_FOUND_ERROR));
 			e.printStackTrace();
 		}
 
 		//setting configuration variables to spider variables
-		if (cfl.getProperties().containsKey("targetProtocol")){
-			targetProtocol = cfl.getProperties().get("targetProtocol");
-			log.debug("target protocol is: " + targetProtocol);
-		}else {
-			log.error("target protocol not found throw missing data exception");
+
+		targetProtocol = cfl.getProperties().get(TARGET_PROTOCOL);
+		log.debug("target protocol is: " + targetProtocol);
+
+		targetHost = cfl.getProperties().get(TARGET_HOST);
+		log.debug("target host is: " + targetHost);
+
+		targetFilePath = cfl.getProperties().get(TARGET_FILE_PATH);
+		log.debug("target file path is: " + targetFilePath);
+
+		targetCode = cfl.getProperties().get(TARGET_SEARCH_CODE);
+		log.debug("target file path is: " + targetCode);
+
+		targetCodeEnd = cfl.getProperties().get(TARGET_END_SEARCH_CODE);
+		log.debug("target file path is: " + targetCodeEnd);
+
+		savePath = cfl.getProperties().get(SAVE_PATH);
+		log.debug("target file path is: " + savePath);
+
+		saveExtension = cfl.getProperties().get(SAVE_EXTENSION);
+		log.debug("target file path is: " + saveExtension);
+
+		if (targetProtocol== null || targetHost== null ||
+				targetFilePath == null){
+			log.error("missing data error");
 		}
 
-		if (cfl.getProperties().containsKey("targetHost")){
-			targetHost = cfl.getProperties().get("targetHost");
-			log.debug("target host is: " + targetHost);
-		}else {
-			log.error("target host not found throw missing data exception");
+		if (targetCode== null || targetCodeEnd== null ||
+				savePath == null || saveExtension == null){
+			log.error("missing data error");
 		}
-
-		if (cfl.getProperties().containsKey("targetFilePath")){
-			targetFilePath = cfl.getProperties().get("targetFilePath");
-			log.debug("target file path is: " + targetFilePath);
-		}else {
-			log.error("target host not found throw missing data exception");
-		}
-
-		if (cfl.getProperties().containsKey("targetCode")){
-			targetCode = cfl.getProperties().get("targetCode");
-			log.debug("target file path is: " + targetCode);
-		}else {
-			log.error("target search code not found throw missing data "
-					+ "exception");
-		}
-
-		if (cfl.getProperties().containsKey("targetCodeEnd")){
-			targetCodeEnd = cfl.getProperties().get("targetCodeEnd");
-			log.debug("target file path is: " + targetCodeEnd);
-		}else {
-			log.error("target end search code not found throw missing data "
-					+ "exception");
-		}
-
-		if (cfl.getProperties().containsKey("savePath")){
-			savePath = cfl.getProperties().get("savePath");
-			log.debug("target file path is: " + savePath);
-		}else {
-			log.error("target end search code not found throw missing data "
-					+ "exception");
-		}
-
-		if (cfl.getProperties().containsKey("saveExtension")){
-			saveExtension = cfl.getProperties().get("saveExtension");
-			log.debug("target file path is: " + saveExtension);
-		}else {
-			log.error("target end search code not found throw missing data "
-					+ "exception");
-		}
-
 
 	}
 }

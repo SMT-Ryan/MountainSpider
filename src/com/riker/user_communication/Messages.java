@@ -6,8 +6,8 @@ import java.util.Map;
 /****************************************************************************
  * <b>Title</b>: Messages.java <p/>
  * <b>Project</b>: Mountain Spider <p/>
- * <b>Description: </b> This class houses all the messages displayed to the 
- * user.  
+ * <b>Description: </b> This class houses some messages displayed to the 
+ * user.  everything in this class would be replaced with log4j logging.  
  * <p/>
  * <b>Copyright:</b> Copyright (c) 2014<p/>
  * <b>Company:</b> Silicon Mountain Technologies<p/>

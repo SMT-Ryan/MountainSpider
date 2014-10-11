@@ -51,18 +51,16 @@ public class ConnectionManager extends LoggerShare {
 	 * @throws IOException thrown if URL contains null pointers and thrown if 
 	 * input stream not established
 	 */
-	public InputStream connectTargetWebsite(String targetDomainName, 
-			String targetUri, String targetProtocol) throws IOException{
+	public InputStream connectTargetWebsite(String target) throws IOException{
 
 		//opens the target URL
-
-		URL targetUrl = new URL(targetProtocol + targetDomainName 
-				+ targetUri);
+		URL targetUrl = new URL(target);
 
 		//sets the header map
 		headerMap = setHeader(targetUrl, headerMap);
 
 		InputStream in = targetUrl.openStream();
+
 		log.debug("Connection Manager has a connection");
 		return in;
 

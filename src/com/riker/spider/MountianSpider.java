@@ -6,11 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import Logger.LoggerShare;
-
 import com.riker.configuration.ConfigFileLoader;
 import com.riker.connection.ConnectionManager;
 import com.riker.file.FileManager;
+import com.riker.logger.LoggerShare;
 import com.riker.parser.DataParser;
 import com.riker.user_communication.Messages;
 

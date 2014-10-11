@@ -3,7 +3,7 @@ package com.riker.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import Logger.LoggerShare;
+import com.riker.logger.LoggerShare;
 
 /****************************************************************************
  * <b>Title</b>: DataParser.java <p/>

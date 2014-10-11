@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import Logger.LoggerShare;
+import com.riker.logger.LoggerShare;
 
 
 /****************************************************************************

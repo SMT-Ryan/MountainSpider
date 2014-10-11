@@ -1,4 +1,4 @@
-package Logger;
+package com.riker.logger;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 

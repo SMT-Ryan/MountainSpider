@@ -3,11 +3,7 @@ package com.riker.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import Logger.LoggerShare;
-
-import com.riker.user_communication.Messages;
 
 /****************************************************************************
  * <b>Title</b>: DataParser.java <p/>
@@ -58,7 +54,7 @@ public class DataParser extends LoggerShare {
 	 * @param mg 
 	 * @return the list of strings as searched for targets.
 	 */
-	public List<String> ParseForTarget(Messages mg) {
+	public List<String> ParseForTarget() {
 
 		String dataString = new String(data);
 
@@ -66,12 +62,13 @@ public class DataParser extends LoggerShare {
 
 		int i = 0;
 		int t = 0;
-
+		log.debug("parsing loop is about to begin");
 		while (true) {
 
 			t = dataString.indexOf(this.target, i);
 			int start = t + this.target.length();
 			if (t == -1) {
+				log.debug("parsing loop breaks");
 				break;
 			}
 			int end = dataString.indexOf(this.targetEnd, start);
@@ -79,6 +76,7 @@ public class DataParser extends LoggerShare {
 
 			i = end + 1;  
 		}
+		log.debug("parsing loop is complete");
 		return secondaryTargetFilePath;
 	}
 
@@ -131,6 +129,7 @@ public class DataParser extends LoggerShare {
 	}
 
 	/**
+	 * returns the current value in targetEnd variable
 	 * @return the targetEnd
 	 */
 	public String getTargetEnd() {
@@ -138,6 +137,7 @@ public class DataParser extends LoggerShare {
 	}
 
 	/**
+	 * sets the targetEnd variable
 	 * @param targetEnd the targetEnd to set
 	 */
 	public void setTargetEnd(String targetEnd) {

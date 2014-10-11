@@ -4,15 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 
 import Logger.LoggerShare;
 
-import com.riker.user_communication.Messages;
 
 /****************************************************************************
  * <b>Title</b>: ConnectionManager.java <p/>

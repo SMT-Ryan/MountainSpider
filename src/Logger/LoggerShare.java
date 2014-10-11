@@ -18,7 +18,7 @@ public abstract class LoggerShare {
 
 	public final Logger log = Logger.getLogger(this.getClass());
 	final static String LOGGER_PATH = "scripts/log4j.properties";
-	
+
 	/**
 	 * This class is an abstract class that holds the logger for child classes.
 	 */

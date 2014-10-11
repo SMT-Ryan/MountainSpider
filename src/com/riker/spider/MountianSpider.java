@@ -15,7 +15,7 @@ import com.riker.parser.DataParser;
 import com.riker.user_communication.Messages;
 
 public class MountianSpider extends LoggerShare {
-	
+
 	private byte[] data = null;
 	private String targetHost = null;
 	private String targetFilePath = null;
@@ -64,28 +64,25 @@ public class MountianSpider extends LoggerShare {
 
 		try{
 			//Connects to target website and loads byte array data
-			ConnectionManager cm = new ConnectionManager();
-			
-			data = cm.getData(cm.connectTargetWebsite(targetHost, 
+			ConnectionManager MtSdCon = new ConnectionManager();
+
+			data = MtSdCon.getData(MtSdCon.connectTargetWebsite(targetHost, 
 					targetFilePath, targetProtocol));
-			
-			
+
+
 			System.out.println(mg.displayMessages(mg.PRIMARY_TARGET));
 
 			//parses the byte array for the target code
 			DataParser dp = new DataParser(data, targetCode, targetCodeEnd);
-			List<String> secondaryFilePath = dp.ParseForTarget(mg);
+			List<String> secondaryFilePath = dp.ParseForTarget();
 
 			//iterates over secondary file list and saves data 
-			saveSecondaryTargetFiles(secondaryFilePath, cm);
+			saveSecondaryTargetFiles(secondaryFilePath, MtSdCon);
 
 		}catch (NullPointerException | IOException np){
 			log.error("An error has occured in the process method");
 			np.printStackTrace();
-			
 		}
-
-
 	}   
 
 	/**
@@ -97,25 +94,25 @@ public class MountianSpider extends LoggerShare {
 	 * 
 	 */
 	private void saveSecondaryTargetFiles(List<String> secondaryFilePath, 
-			ConnectionManager cm) {
-		
+			ConnectionManager MtSdCon) {
+
 		//iterate over list for new targets
 		for (int i =0; i < secondaryFilePath.size(); i++ ) {
 			String name = null;
-			
+
 			targetFilePath = secondaryFilePath.get(i);
 			//connect to new target
 			System.out.println(mg.displayMessages(mg.SECONDARY_TARGET));
-			
+
 			try {
-				data = cm.getData(cm.connectTargetWebsite(targetHost, 
+				data = MtSdCon.getData(MtSdCon.connectTargetWebsite(targetHost, 
 						targetFilePath, targetProtocol));
 			} catch (IOException e1) {
 				log.error("An error has occured in the secondary file loop");
 				e1.printStackTrace();
 			}
 
-			
+
 			//saving message
 			System.out.println(mg.displayMessages(mg.SAVING));
 
@@ -135,7 +132,7 @@ public class MountianSpider extends LoggerShare {
 			sb.append(name);
 			sb.append(".");
 			sb.append(saveExtension);
-			
+
 			fm.setName(sb.toString());
 			log.debug("string builders value is: " + sb.toString());
 			try {
@@ -150,7 +147,7 @@ public class MountianSpider extends LoggerShare {
 						+ "reducing the counter by one and restarting loop");
 			}
 
-			
+
 		}
 
 		System.out.println(mg.displayMessages(mg.COMPLETE));
@@ -159,14 +156,12 @@ public class MountianSpider extends LoggerShare {
 
 	/**
 	 * This method loads the search parameters from the config file into the 
-	 * @param mg2 
-	 * @return
 	 */
 	private void loadSearchParameter() {
 		//loads config file and sets up setters for filling data
 		ConfigFileLoader cfl = new ConfigFileLoader();
 		cfl.setConfigFilePath(CONFIG_FILE_PATH);
-		
+
 		try {
 			cfl.configData(KEY_SEPARATOR);
 		} catch (IOException e) {
@@ -230,6 +225,6 @@ public class MountianSpider extends LoggerShare {
 					+ "exception");
 		}
 
-		
+
 	}
 }

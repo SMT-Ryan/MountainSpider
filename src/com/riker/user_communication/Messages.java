@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.riker.user_communication;
 
 import java.util.HashMap;

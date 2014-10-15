@@ -185,8 +185,8 @@ public class MountianSpider extends LoggerShare {
 				File dir = new File(savePath);
 				dir.mkdir();
 				i--;
-				log.debug("the save file was missing and has been created "
-						+ "reducing the counter by one and restarting loop");
+				log.error("the save directory was missing. one has been created"
+						+ " reducing the counter by one and restarting loop");
 			}
 
 

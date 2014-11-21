@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /****************************************************************************
  * <b>Title</b>: ConfigFileLoader.java <p/>
  * <b>Project</b>: Mountain Spider <p/>
@@ -23,12 +24,14 @@ public class ConfigFileLoader {
 
 	Map<String, String> properties = new HashMap<String, String>();
 	String confilFilePath = null;
-
+	
+	
 	/**
 	 * This constructor makes an instance of the ConfigFileLoader class.
 	 * @param mg 
 	 */
 	public ConfigFileLoader() {
+		
 
 	}
 
@@ -43,7 +46,7 @@ public class ConfigFileLoader {
 
 
 		int separator = 0;
-
+		
 		BufferedReader br = new BufferedReader(
 				new FileReader(confilFilePath));
 		String line = br.readLine();
@@ -56,7 +59,7 @@ public class ConfigFileLoader {
 			if (separator != 0 && separator != -1){
 				//filling the property map
 				properties.put(line.substring(0, separator), 
-						line.substring(separator + 2));
+						line.substring(separator + 1));
 			}
 			line = br.readLine();
 		}
@@ -87,6 +90,9 @@ public class ConfigFileLoader {
 	 * @param CONFIG_FILE_PATH
 	 */
 	public void setConfigFilePath(String CONFIG_FILE_PATH) {
+		
+		//servletContext.getRealPath();
+
 		confilFilePath = CONFIG_FILE_PATH;
 	}
 }
